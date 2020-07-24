@@ -14,7 +14,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "nodemon": "^2.0.4",
+    "pug": "^3.0.0"
   },
   "bugs": {
     "url": "https://github.com/sergeyfrolenko/shop/issues"

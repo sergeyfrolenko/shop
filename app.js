@@ -1,13 +1,18 @@
 let express = require('express');
 let app = express();
+const path = require('path');
 
 // middleware
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'pug');
 
 // routing
-app.get('/', function (req, res) {
-  console.log("/");
-  res.render('index.html');
+app.get('/main', function (req, res) {
+  res.render('main', {
+    title: 'My express',
+    foo: 'hello',
+    bar: 7
+  });
 });
 app.get('/cat', function (req, res) {
   res.end('cat');

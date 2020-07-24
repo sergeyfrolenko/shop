@@ -21,7 +21,7 @@ let app = express();
 
 // middleware
 app.use(express.static('public'));
-
+app.set('view engine', 'pug');
 // routing
 app.get('/', function (req, res) {
   console.log("/");
