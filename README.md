@@ -2,7 +2,7 @@
 
 ## Code snippets
 
-create server
+### create server
 ```javascript
 const http = require('http');
 const fs = require('fs');
@@ -14,7 +14,7 @@ http.createServer(function (request, response) {
 });
 ```
 
-create server on express.js
+### create server on express.js
 ```javascript
 let express = require('express');
 let app = express();
@@ -34,5 +34,34 @@ app.get('/cat', function (req, res) {
 // server setting
 app.listen(3000, function () {
   console.log('node express work on 3000');
+});
+```
+
+### Database connection
+```javascript
+// db connection
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'user',
+  password: 'Node2020',
+  database: 'shop'
+});
+connection.connect(function (err) {
+  if (err) throw err;
+  console.log("Connected!");
+});
+// example using db
+app.get('/db', function (req, res) {
+  connection.query(
+    'SELECT * FROM testdb',
+    function (error, result) {
+      if (error) throw error;
+      console.log(result);
+      res.render('main', {
+        foo: 'hello',
+        bar: 7,
+      });
+    }
+  );
 });
 ```
