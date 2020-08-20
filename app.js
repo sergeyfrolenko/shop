@@ -69,6 +69,14 @@ app.get('/main', function (req, res) {
 });
 app.get('/cat', function (req, res) { // ...:3030/cat?id=1
   let catId = req.query.id || 1;
+  let cats = new Promise(function (resolve, reject) {
+    connection.query(
+      'SELECT * FROM category',
+      function (error, result) {
+        if (error) reject(err);
+        resolve(result);
+      });
+  });
   let cat = new Promise(function (resolve, reject) {
     connection.query(
       'SELECT * FROM category WHERE id=' + catId,
@@ -86,10 +94,12 @@ app.get('/cat', function (req, res) { // ...:3030/cat?id=1
       });
   });
 
-  Promise.all([cat, goods]).then(function (value) {
+  Promise.all([cats, cat, goods]).then(function (value) {
+    console.log(JSON.parse(JSON.stringify(value[0])));
     res.render('cat', {
-      cat: JSON.parse(JSON.stringify(value[0])),
-      goods: JSON.parse(JSON.stringify(value[1]))
+      cats: JSON.parse(JSON.stringify(value[0])),
+      cat: JSON.parse(JSON.stringify(value[1])),
+      goods: JSON.parse(JSON.stringify(value[2]))
     });
     console.log('Download category.')
   });
@@ -97,14 +107,33 @@ app.get('/cat', function (req, res) { // ...:3030/cat?id=1
 });
 
 app.get('/goods', function (req, res) {
-  connection.query('SELECT * FROM goods WHERE id=' + req.query.id, function (error, result, fields) {
-    if (error) throw error;
-    res.render('goods', { goods: JSON.parse(JSON.stringify(result)) });
+  let catId = req.query.id || 1;
+  let goods = new Promise(function (resolve, reject) {
+    connection.query(
+      'SELECT * FROM goods WHERE id=' + catId,
+      function (error, result) {
+        if (error) reject(err);
+        resolve(result);
+      });
+
+  });
+  let cats = new Promise(function (resolve, reject) {
+    connection.query(
+      'SELECT * FROM category',
+      function (error, result) {
+        if (error) reject(err);
+        resolve(result);
+      });
+  });
+  Promise.all([cats, goods]).then(function (value) {
+    res.render('goods', {
+      cats: JSON.parse(JSON.stringify(value[0])),
+      goods: JSON.parse(JSON.stringify(value[1]))
+    });
   });
 });
 
 app.post('/get-category-list', function (req, res) {
-  // console.log(req.body);
   connection.query('SELECT id, category FROM category', function (error, result, fields) {
     if (error) throw error;
     res.json(result);

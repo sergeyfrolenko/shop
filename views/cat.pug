@@ -1,11 +1,13 @@
 include header
-
 div(class='wrap')
+  
   div(class='content')
     header(class='site-header')
       include site_header
+      
 
     div(class='container')
+      include nav
       div(class='row')
         div(class='col col-md-12')
           h2 #{cat[0]['category']}
@@ -16,5 +18,5 @@ div(class='wrap')
 
 
         div #{cat[0]['description']}
-  include nav
+  
 include footer
