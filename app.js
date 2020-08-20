@@ -139,6 +139,9 @@ app.post('/get-category-list', function (req, res) {
     res.json(result);
   });
 });
+app.post('/get-goods-info', function (req, res) {
+  console.log(req.body.key);
+});
 
 // server setting
 app.listen(3030, function () {
