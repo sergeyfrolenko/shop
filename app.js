@@ -1,4 +1,5 @@
 let express = require('express');
+var bodyParser = require('body-parser');
 let app = express();
 const path = require('path');
 const mysql = require('mysql');
@@ -18,6 +19,7 @@ connection.connect(function (err) {
 // middleware
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'pug');
+app.use(bodyParser.json());
 
 // routing
 app.get('/', function (req, res) {
@@ -140,7 +142,8 @@ app.post('/get-category-list', function (req, res) {
   });
 });
 app.post('/get-goods-info', function (req, res) {
-  console.log(req.body.key);
+  console.log(req.body);
+  res.json({ msg: 'msg from server' });
 });
 
 // server setting

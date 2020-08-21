@@ -4,7 +4,7 @@ document.querySelectorAll('.add-to-cart').forEach(function (element) {
 });
 
 function addToCart() {
-  let goodsId = this.dataset.goods_id;
+  let goodsId = this.dataset.goods_id; // dataset is object with atribute from html with data-* begin // data-goods_id
   if (cart[goodsId]) {
     cart[goodsId]++;
   }

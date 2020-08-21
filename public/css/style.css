@@ -77,3 +77,22 @@ ul.category-list {
 ul.category-list a {
   color: #424242;
 }
+
+@media (max-width: 1280px) {
+  .site-nav {
+    position: relative;
+    
+    left: 0px;
+    top: 0px;
+    min-height: auto;
+  }
+  .site-nav ul {
+    display: flex;
+    flex-direction: row;
+  }
+  .site-nav ul li {
+    list-style: none;
+    margin-top: 5px;
+    margin-right: 15px;
+  }
+}
