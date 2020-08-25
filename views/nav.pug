@@ -1,6 +1,8 @@
 div(class='site-nav')
     ul
-        each cat in cats
+      li 
+        a(href="order") to cart
+      each cat in cats
           li
             a(href="cat?id="+cat['id'])= cat['category']
 #cart-nav

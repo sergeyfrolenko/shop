@@ -23,24 +23,39 @@ app.use(bodyParser.json());
 
 // routing
 app.get('/', function (req, res) {
-  connection.query(
-    'SELECT * FROM goods',
-    function (error, result) {
-      if (error) throw error;
-      ///  console.log(result);
-      let goods = {};
-      for (let i = 0; i < result.length; i++) {
-        goods[result[i]['id']] = result[i];
+  let cat = new Promise(function (resolve, reject) {
+    connection.query(
+      "select id,name, cost, image, category from (select id,name,cost,image,category, if(if(@curr_category != category, @curr_category := category, '') != '', @k := 0, @k := @k + 1) as ind   from goods, ( select @curr_category := '' ) v ) goods where ind < 3",
+      function (error, result, field) {
+        if (error) return reject(error);
+        resolve(result);
       }
-      //console.log(goods);
-      // console.log(JSON.parse(JSON.stringify(goods)));
-      res.render('main', {
-        foo: 'hello',
-        bar: 7,
-        goods: JSON.parse(JSON.stringify(goods))
+    );
+  });
+  let catDescription = new Promise(function (resolve, reject) {
+    connection.query(
+      "SELECT * FROM category",
+      function (error, result, field) {
+        if (error) return reject(error);
+        resolve(result);
+      }
+    );
+  });
+  let cats = new Promise(function (resolve, reject) {
+    connection.query(
+      'SELECT * FROM category',
+      function (error, result) {
+        if (error) reject(err);
+        resolve(result);
       });
-    }
-  );
+  });
+  Promise.all([cats, cat, catDescription]).then(function (value) {
+    res.render('index', {
+      cats: JSON.parse(JSON.stringify(value[0])),
+      cat: JSON.parse(JSON.stringify(value[2])),
+      goods: JSON.parse(JSON.stringify(value[1]))
+    });
+  });
 });
 app.get('/db', function (req, res) {
   connection.query(
@@ -61,13 +76,6 @@ app.get('/db', function (req, res) {
       });
     }
   );
-});
-app.get('/main', function (req, res) {
-  res.render('main', {
-    title: 'My express',
-    foo: 'hello',
-    bar: 7
-  });
 });
 app.get('/cat', function (req, res) { // ...:3030/cat?id=1
   let catId = req.query.id || 1;
@@ -97,15 +105,12 @@ app.get('/cat', function (req, res) { // ...:3030/cat?id=1
   });
 
   Promise.all([cats, cat, goods]).then(function (value) {
-    console.log(JSON.parse(JSON.stringify(value[0])));
     res.render('cat', {
       cats: JSON.parse(JSON.stringify(value[0])),
       cat: JSON.parse(JSON.stringify(value[1])),
       goods: JSON.parse(JSON.stringify(value[2]))
     });
-    console.log('Download category.')
   });
-  console.log(`Goods from category number ${catId} is downloading...`)
 });
 
 app.get('/goods', function (req, res) {
@@ -133,6 +138,9 @@ app.get('/goods', function (req, res) {
       goods: JSON.parse(JSON.stringify(value[1]))
     });
   });
+});
+app.get('/order', function (req, res) {
+  res.render('order');
 });
 
 app.post('/get-category-list', function (req, res) {

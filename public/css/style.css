@@ -58,7 +58,7 @@
 
 .site-nav {
   width: 200px;
-  min-height: 100vh;
+  min-height: 100px;
   position: absolute;
   left: -200px;
   top: 30px;
