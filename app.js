@@ -164,6 +164,24 @@ app.post('/get-goods-info', function (req, res) {
     res.send('0');
   }
 });
+app.post('/finish-order', function (req, res) {
+  console.log(Object.keys(req.body.key));
+  if (req.body.key.length != 0) {
+    let key = Object.keys(req.body.key);
+    connection.query(
+      'SELECT id,name,cost FROM goods WHERE id IN (' + key.join(',') + ')',
+      function (error, result, fields) {
+        if (error) throw error;
+        console.log(result);
+        // sendMail(req.body, result).catch(console.error);
+        res.send('1');
+      });
+  }
+  else {
+    res.send('0');
+  }
+});
+
 
 // server setting
 app.listen(3030, function () {
