@@ -96,3 +96,8 @@ ul.category-list a {
     margin-right: 15px;
   }
 }
+
+/* >>>>>>>>>>> CART <<<<<<<<<<<<<<< */
+.cart-minus, .cart-plus {
+  cursor: pointer;
+}

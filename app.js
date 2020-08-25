@@ -142,8 +142,19 @@ app.post('/get-category-list', function (req, res) {
   });
 });
 app.post('/get-goods-info', function (req, res) {
-  console.log(req.body);
-  res.json({ msg: 'msg from server' });
+  const keys = Object.keys(req.body);
+  if (keys.length != 0) {
+    connection.query('SELECT id, name, cost FROM goods WHERE id IN (' + keys.join(',') + ')', function (error, result) {
+      if (error) throw error;
+      const goods = {};
+      for (let i = 0; i < result.length; i++) {
+        goods[result[i]['id']] = result[i];
+      }
+      res.json(goods);
+    });
+  } else {
+    res.send('0');
+  }
 });
 
 // server setting
