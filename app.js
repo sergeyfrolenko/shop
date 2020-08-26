@@ -165,11 +165,13 @@ app.post('/get-goods-info', function (req, res) {
   }
 });
 app.post('/finish-order', function (req, res) {
-  console.log(Object.keys(req.body.key));
-  if (req.body.key.length != 0) {
+  console.log(req.body);
+  // console.log(Object.keys(req.body.key));
+  if (req.body.key != 'empty') {
     let key = Object.keys(req.body.key);
+    let sql = "INSERT INTO orders (user, cart) VALUES ('" + req.body.username + "','" + JSON.stringify(req.body.key) + "')";
     connection.query(
-      'SELECT id,name,cost FROM goods WHERE id IN (' + key.join(',') + ')',
+      sql,
       function (error, result, fields) {
         if (error) throw error;
         console.log(result);
@@ -184,6 +186,6 @@ app.post('/finish-order', function (req, res) {
 
 
 // server setting
-app.listen(3030, function () {
-  console.log('node express work on 3030');
+app.listen(3031, function () {
+  console.log('node express work on 3031');
 });

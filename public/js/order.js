@@ -16,11 +16,11 @@ document.querySelector('#lite-shop-order').onsubmit = function (event) {
   fetch('/finish-order', {
     method: 'POST',
     body: JSON.stringify({
-      // 'username': username,
+      'username': username,
       // 'phone': phone,
       // 'address': address,
       // 'email': email,
-      'key': JSON.parse(localStorage.getItem('cart'))
+      'key': JSON.parse(localStorage.getItem('cart')) || 'empty'
     }),
     headers: {
       'Accept': 'application/json',
@@ -32,10 +32,10 @@ document.querySelector('#lite-shop-order').onsubmit = function (event) {
     })
     .then(function (body) {
       if (body == 1) {
-
+        console.log('order is done');
       }
       else {
-
+        console.log('empty cart');
       }
-    })
+    });
 }
